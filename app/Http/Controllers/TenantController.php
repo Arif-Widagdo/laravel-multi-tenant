@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tenant;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules;
 
 class TenantController extends Controller
 {
@@ -12,7 +13,10 @@ class TenantController extends Controller
      */
     public function index()
     {
-        return view('tenants.index');
+        $tenants = Tenant::with('domains')->latest()->get();
+        // dd($tenants->toArray());
+
+        return view('tenants.index', compact('tenants'));
     }
 
     /**
@@ -28,7 +32,20 @@ class TenantController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        $validationData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:tenants',
+            'domain_name' => 'required|string|max:255|unique:domains,domain',
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        $tenant = Tenant::create($validationData);
+        $tenant->domains()->create([
+            'domain' => $validationData['domain_name'].'.'.config('app.domain'),
+            // 'domain' => $validationData['domain_name'].'.'.$request->getHost(),
+        ]);
+
+        return redirect()->route('tenants.index');
     }
 
     /**
