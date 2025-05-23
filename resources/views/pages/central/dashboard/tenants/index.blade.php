@@ -75,9 +75,22 @@
                                                 @endforeach
                                             </td>
                                             <td class="px-6 py-4 text-right whitespace-nowrap">
-                                                <button class="mr-3 text-sm text-indigo-600 hover:underline">Edit</button>
-                                                <button class="text-sm text-red-600 hover:underline">Delete</button>
+                                                <div class="flex items-center justify-end space-x-3">
+                                                    <!-- Show -->
+                                                    <a href="{{ route('tenants.show', $tenant) }}" class="text-sm text-blue-600 hover:underline">Show</a>
+                                                    <!-- Edit -->
+                                                    <a href="{{ route('tenants.edit', $tenant) }}" class="text-sm text-indigo-600 hover:underline">Edit</a>
+                                                    <!-- Delete -->
+                                                    <form action="{{ route('tenants.destroy', $tenant) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this tenant?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="text-sm text-red-600 hover:underline">
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </td>
+
                                         </tr>
                                     @endforeach
                                 @else

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Central;
 
+use App\Http\Controllers\Controller;
 use App\Models\Tenant;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
@@ -14,9 +15,7 @@ class TenantController extends Controller
     public function index()
     {
         $tenants = Tenant::with('domains')->latest()->get();
-        // dd($tenants->toArray());
-
-        return view('tenants.index', compact('tenants'));
+        return view('pages.central.dashboard.tenants.index', compact('tenants'));
     }
 
     /**
@@ -24,7 +23,7 @@ class TenantController extends Controller
      */
     public function create()
     {
-        return view('tenants.create');
+        return view('pages.central.dashboard.tenants.create');
     }
 
     /**
@@ -53,7 +52,9 @@ class TenantController extends Controller
      */
     public function show(Tenant $tenant)
     {
-        //
+        $tenant->load('domains');
+
+        return view('pages.central.dashboard.tenants.show', compact('tenant'));
     }
 
     /**
@@ -61,7 +62,9 @@ class TenantController extends Controller
      */
     public function edit(Tenant $tenant)
     {
-        //
+        $tenant->load('domains');
+
+        return view('pages.central.dashboard.tenants.edit', compact('tenant'));
     }
 
     /**
@@ -69,7 +72,24 @@ class TenantController extends Controller
      */
     public function update(Request $request, Tenant $tenant)
     {
-        //
+        $validationData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:tenants,email,' . $tenant->id,
+            'domain_name' => 'required|string|max:255|unique:domains,domain,' . $tenant->domains->first()->id,
+            'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        $tenant->update([
+            'name' => $validationData['name'],
+            'email' => $validationData['email'],
+            ...(isset($validationData['password']) ? ['password' => bcrypt($validationData['password'])] : []),
+        ]);
+
+        $tenant->domains()->first()->update([
+            'domain' => $validationData['domain_name'] . '.' . config('app.domain'),
+        ]);
+
+        return redirect()->route('tenants.index')->with('success', 'Tenant updated successfully.');
     }
 
     /**
@@ -77,6 +97,9 @@ class TenantController extends Controller
      */
     public function destroy(Tenant $tenant)
     {
-        //
+        $tenant->domains()->delete();
+        $tenant->delete();
+
+        return redirect()->route('tenants.index')->with('success', 'Tenant deleted successfully.');
     }
 }

@@ -64,65 +64,60 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ```
 resources/views/
-├── admin/                     # Tampilan untuk super admin/global admin (jika ada)
-│   ├── dashboard.blade.php
-│   └── users/index.blade.php
-│
-├── tenant/                   # Semua tampilan untuk tenant application
-│   ├── layouts/              # Layout khusus tenant (header, sidebar, dsb)
-│   │   └── app.blade.php
-│   ├── auth/                 # Autentikasi untuk tenant
-│   │   ├── login.blade.php
-│   │   └── register.blade.php
-│   ├── dashboard.blade.php   # Dashboard tenant
-│   ├── profile/              # Profil user tenant
-│   │   └── edit.blade.php
-│   └── settings/             # Pengaturan tenant (opsional)
-│       └── index.blade.php
-│
-├── shared/                   # Komponen/tampilan umum yang dipakai semua (admin + tenant)
-│   ├── components/           # Komponen Blade reusable (alert, modal, dsb)
-│   └── layouts/              # Layout utama, jika ada (shared base)
-│
-├── welcome.blade.php         # Halaman welcome non-tenant (publik)
-└── dashboard.blade.php       # Opsional: dashboard global (jika ada)
-
-
-
-resources/views/
-├── public/                        # Halaman publik / non-login (umum)
-│   ├── home.blade.php             # Halaman utama (landing page)
-│   ├── about.blade.php
-│   └── contact.blade.php
-│
-├── tenant/                        # Semua tampilan untuk tenant
-│   ├── layouts/
-│   │   ├── app.blade.php          # Layout utama (untuk authenticated tenant)
-│   │   └── guest.blade.php        # Layout guest tenant (login/register)
+├── pages/
+│   ├── app/                          # Untuk admin/superadmin (domain utama)
+│   │   ├── public/                   # Tidak perlu login
+│   │   │   ├── login.blade.php       # /login (admin)
+│   │   │   ├── home.blade.php        # /home
+│   │   │   └── contact.blade.php     # /contact
+│   │   │
+│   │   ├── dashboard/                # /dashboard (admin)
+│   │   │   ├── index.blade.php       # /dashboard
+│   │   │   └── tenants.blade.php     # /dashboard/tenants
+│   │   │
+│   │   ├── profile/
+│   │   │   └── edit.blade.php        # /profile/edit
+│   │   │
+│   │   └── settings/
+│   │       └── index.blade.php       # /settings
 │   │
-│   ├── auth/                      # Untuk login/register tenant
-│   │   ├── login.blade.php        # Prefix: /login (middleware: guest)
-│   │   └── register.blade.php     # Prefix: /register (middleware: guest)
+│   ├── tenant/                       # Untuk tenant (subdomain)
+│   │   ├── public/                   # Tidak perlu login
+│   │   │   ├── login.blade.php       # /login (tenant)
+│   │   │   └── register.blade.php    # /register
+│   │   │
+│   │   ├── dashboard/                # /dashboard (tenant)
+│   │   │   ├── index.blade.php       # /dashboard
+│   │   │   └── analytics.blade.php   # /dashboard/analytics
+│   │   │
+│   │   ├── profile/
+│   │   │   └── edit.blade.php        # /profile/edit
+│   │   │
+│   │   ├── orders/
+│   │   │   └── index.blade.php       # /orders
+│   │   │
+│   │   └── settings/
+│   │       └── index.blade.php       # /settings
 │   │
-│   ├── dashboard/                 # Semua tampilan setelah login tenant
-│   │   ├── index.blade.php        # Prefix: /dashboard (middleware: auth)
-│   │   └── analytics.blade.php    # Prefix: /dashboard/analytics
-│   │
-│   ├── profile/                   # Profil user tenant
-│   │   └── edit.blade.php         # Prefix: /dashboard/profile (middleware: auth)
-│   │
-│   └── settings/                  # Pengaturan tenant
-│       └── index.blade.php        # Prefix: /dashboard/settings (middleware: auth)
+│   └── shared/                       # Halaman umum jika ada (optional)
+│       └── contact.blade.php         # /contact umum
 │
-├── shared/                        # Komponen/layout yang reusable
-│   ├── components/
-│   │   ├── alert.blade.php
-│   │   └── modal.blade.php
-│   └── layouts/
-│       └── base.blade.php         # Layout dasar (jika perlu inheritance)
+├── components/                       # Komponen UI yang reusable
+│   ├── alert.blade.php
+│   └── modal.blade.php
 │
-└── errors/                        # Error pages
+├── layouts/
+│   ├── app/                          # Untuk admin/superadmin
+│   │   ├── app.blade.php             # Layout utama
+│   │   └── guest.blade.php           # Layout login/register
+│   ├── tenant/                       # Untuk tenant
+│   │   ├── app.blade.php
+│   │   └── guest.blade.php
+│   └── base.blade.php                # Layout dasar
+│
+└── errors/
     ├── 404.blade.php
     └── 500.blade.php
+
 
 ```
