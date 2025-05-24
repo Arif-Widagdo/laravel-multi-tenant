@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Central;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tenant;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
 
@@ -54,7 +55,17 @@ class TenantController extends Controller
     {
         $tenant->load('domains');
 
-        return view('pages.central.dashboard.tenants.show', compact('tenant'));
+        // Inisialisasi tenant context
+        tenancy()->initialize($tenant);
+
+        $users = User::latest()->get();
+
+        $posts = [];
+
+        // Matikan context setelah ambil data
+        tenancy()->end();
+
+        return view('pages.central.dashboard.tenants.show', compact('tenant', 'users', 'posts'));
     }
 
     /**

@@ -34,12 +34,13 @@ Route::middleware([
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
-    Route::view('/', 'pages.tenant.welcome')->name('welcome.tenant');
+    Route::get('/', function(){
+        return view('pages.tenant.welcome');
+    })->name('welcome.tenant');
 
     Route::middleware('auth')->group(function () {
         // This group routes for dashboard
         Route::middleware('verified')->prefix('/dashboard')->group(function () {
-            // Route::view('/', 'pages.tenant.dashboard.index')->name('dashboard.tenant');
             Route::get('/', function(){
                 return view('pages.tenant.dashboard.index');
             })->name('dashboard.tenant');

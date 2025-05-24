@@ -15,12 +15,16 @@ use App\Http\Controllers\Central\Auth\VerifyEmailController;
 
 foreach (config('tenancy.central_domains') as $domain) {
     Route::domain($domain)->group(function () {
-        Route::view('/', 'pages.central.welcome')->name('welcome');
+        Route::get('/', function(){
+            return view('pages.central.welcome');
+        })->name('welcome');
 
         Route::middleware('auth')->group(function () {
             // This group routes for dashboard
             Route::middleware('verified')->prefix('/dashboard')->group(function () {
-                Route::view('/', 'pages.central.dashboard.index')->name('dashboard');
+                Route::get('/', function(){
+                    return view('pages.central.dashboard.index');
+                })->name('dashboard');
 
                 Route::resource('/tenants', TenantController::class);
             });

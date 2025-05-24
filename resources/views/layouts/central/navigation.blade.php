@@ -15,7 +15,7 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('tenants.index')" :active="request()->routeIs('tenants.index')">
+                    <x-nav-link :href="route('tenants.index')" :active="request()->routeIs(['tenants.index', 'tenants.create', 'tenants.edit', 'tenants.show'])">
                         {{ __('Tenants') }}
                     </x-nav-link>
                 </div>
@@ -73,7 +73,7 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('tenants.index')" :active="request()->routeIs('tenants.index')">
+            <x-responsive-nav-link :href="route('tenants.index')" :active="request()->routeIs(['tenants.index', 'tenants.create', 'tenants.edit', 'tenants.show'])">
                 {{ __('Tenants') }}
             </x-responsive-nav-link>
         </div>
