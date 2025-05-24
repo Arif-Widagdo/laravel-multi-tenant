@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Jobs\SeedTenantJob;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -12,6 +13,8 @@ use Stancl\Tenancy\Events;
 use Stancl\Tenancy\Jobs;
 use Stancl\Tenancy\Listeners;
 use Stancl\Tenancy\Middleware;
+// use Stancl\Tenancy\Resolvers\DomainTenantResolver;
+// use Stancl\Tenancy\Resolvers;
 
 class TenancyServiceProvider extends ServiceProvider
 {
@@ -28,6 +31,7 @@ class TenancyServiceProvider extends ServiceProvider
                     Jobs\CreateDatabase::class,
                     Jobs\MigrateDatabase::class,
                     // Jobs\SeedDatabase::class,
+                    SeedTenantJob::class
 
                     // Your own jobs to prepare the tenant.
                     // Provision API keys, create S3 buckets, anything you want!
@@ -102,6 +106,11 @@ class TenancyServiceProvider extends ServiceProvider
         $this->bootEvents();
         $this->mapRoutes();
 
+        // ✅ Aktifkan cached tenant lookup
+        // Resolvers\DomainTenantResolver::$shouldCache = true;
+        // Resolvers\DomainTenantResolver::$cacheTTL = 3600; // TTL dalam detik (opsional)
+        // Resolvers\DomainTenantResolver::$cacheStore = config('cache.default'); // atau null untuk gunakan default
+
         $this->makeTenancyMiddlewareHighestPriority();
     }
 
@@ -121,14 +130,14 @@ class TenancyServiceProvider extends ServiceProvider
     protected function mapRoutes()
     {
         $this->app->booted(function () {
-            if (file_exists(base_path('routes/web/tenant.php'))) {
+            if (file_exists(base_path('routes/web/tenant/_index.php'))) {
                 Route::namespace(static::$controllerNamespace)
-                    ->group(base_path('routes/web/tenant.php'));
+                    ->group(base_path('routes/web/tenant/_index.php'));
             }
 
-            if (file_exists(base_path('routes/api/tenant.php'))) {
+            if (file_exists(base_path('routes/api/tenant/_index.php'))) {
                 Route::namespace(static::$controllerNamespace)
-                    ->group(base_path('routes/api/tenant.php'));
+                    ->group(base_path('routes/api/tenant/_index.php'));
             }
         });
     }

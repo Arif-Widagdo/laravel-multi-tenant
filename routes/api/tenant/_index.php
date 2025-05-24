@@ -32,6 +32,6 @@ Route::middleware([
             ],
             'statusCode' => 200,
             'code' => 'OK'
-        ])->name('api.welcome.tenant');
-    });
+        ]);
+    })->name('api.welcome.tenant');;
 });

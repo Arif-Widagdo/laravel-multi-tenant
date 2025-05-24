@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-central.app-layout>
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
             {{ __(key: 'Add Tenant') }}
@@ -57,4 +57,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-central.app-layout>

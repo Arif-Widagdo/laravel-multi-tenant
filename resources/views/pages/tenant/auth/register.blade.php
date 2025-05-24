@@ -1,5 +1,5 @@
-<x-central.guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+<x-tenant.tenant-guest-layout>
+    <form method="POST" action="{{ route('register.tenant') }}">
         @csrf
 
         <!-- Name -->
@@ -49,4 +49,4 @@
             </x-primary-button>
         </div>
     </form>
-</x-central.guest-layout>
+</x-tenant.tenant-guest-layout>
