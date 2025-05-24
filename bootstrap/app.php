@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Http\Middleware\Tenant\RedirectIfTenantAuthenticated;
 use Stancl\Tenancy\Exceptions\TenantCouldNotBeIdentifiedOnDomainException;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
@@ -16,6 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
 
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->alias([
+            'guest.tenant' => RedirectIfTenantAuthenticated::class,
+        ]);
+
         $middleware->group('universal', []);
     })
     ->withExceptions(function (Exceptions $exceptions) {
