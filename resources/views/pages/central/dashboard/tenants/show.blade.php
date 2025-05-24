@@ -27,7 +27,16 @@
                     <div>
                         <div class="text-sm text-slate-500">Primary Domain</div>
                         <div class="text-base font-medium text-slate-800">
-                            {{ $tenant->domains->first()->domain ?? '-' }}
+                            @php
+                                $scheme = request()->getScheme();
+                                $port = request()->getPort();
+                                $defaultPort = $scheme === 'https' ? 443 : 80;
+                                $portPart = ($port != $defaultPort) ? ':' . $port : '';
+                                $fullDomain = $scheme . '://' . $tenant->domains->first()->domain . $portPart;
+                            @endphp
+                            <a target="_blank" href="{{ $fullDomain }}" class="underline hover:text-indigo-600">
+                                {{ $fullDomain }}
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -66,7 +75,7 @@
                             <table class="min-w-full text-sm bg-white text-slate-700">
                                 <thead class="text-xs uppercase bg-slate-50 text-slate-500">
                                     <tr>
-                                        <th class="px-6 py-3 text-left">ID</th>
+                                        <th class="px-6 py-3 text-left">#</th>
                                         <th class="px-6 py-3 text-left">Name</th>
                                         <th class="px-6 py-3 text-left">Email</th>
                                     </tr>
@@ -74,7 +83,7 @@
                                 <tbody class="divide-y divide-slate-100">
                                     @forelse ($users as $user)
                                         <tr class="transition hover:bg-slate-50">
-                                            <td class="px-6 py-4">{{ $user->id }}</td>
+                                            <td class="px-6 py-4">{{ $loop->iteration }}</td>
                                             <td class="px-6 py-4">{{ $user->name }}</td>
                                             <td class="px-6 py-4">{{ $user->email }}</td>
                                         </tr>
