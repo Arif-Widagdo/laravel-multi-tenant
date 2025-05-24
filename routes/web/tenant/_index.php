@@ -39,7 +39,10 @@ Route::middleware([
     Route::middleware('auth')->group(function () {
         // This group routes for dashboard
         Route::middleware('verified')->prefix('/dashboard')->group(function () {
-            Route::view('/', 'pages.tenant.dashboard.index')->name('dashboard.tenant');
+            // Route::view('/', 'pages.tenant.dashboard.index')->name('dashboard.tenant');
+            Route::get('/', function(){
+                return view('pages.tenant.dashboard.index');
+            })->name('dashboard.tenant');
         });
 
         Route::prefix('/profile')->group(function () {

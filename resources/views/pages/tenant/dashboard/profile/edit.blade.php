@@ -1,4 +1,4 @@
-<x-tenant.app-layout>
+<x-tenant.tenant-app-layout>
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
             {{ __('Profile') }}
@@ -26,4 +26,4 @@
             </div>
         </div>
     </div>
-</x-tenant.app-layout>
+</x-tenant.tenant-app-layout>
